@@ -1,0 +1,37 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+name = "exqudens-example"
+version = "0.0.1"
+description = "Exqudens Example"
+requires-python = ">=3"
+dependencies = [
+    "xmltodict==1.0.2"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.3.4"
+]
+
+[tool.pdm.build]
+includes = ["src/main/py"]
+package-dir = "src/main/py"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src/main/py",
+    "src/test/py"
+]
+testpaths = [
+    "src/test/py"
+]
+junit_family = "xunit1"
+log_level = "DEBUG"
+log_format = "%(levelname).4s %(asctime)s.%(msecs)03d [%(threadName)s] (%(name)s:%(filename)s:%(lineno)d) [%(funcName)s]: %(message)s"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+log_cli = true
+log_file = "build/test/out/log/txt/log.txt"
+addopts = "--junit-xml=build/test/out/report/xml/report.xml"

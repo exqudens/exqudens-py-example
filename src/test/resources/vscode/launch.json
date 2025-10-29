@@ -1,0 +1,109 @@
+{
+    "version": "0.2.0",
+    "inputs": [
+        {
+            "id": "pytest-entry",
+            "type": "pickString",
+            "description": "Pytest Entry",
+            "options": [
+                "@_OPTIONS@"
+            ],
+            "default": "@_DEFAULT@"
+        }
+    ],
+    "configurations": [
+        {
+            "name": "help",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "help"
+            ]
+        },
+        {
+            "name": "clean_env env",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "clean_env",
+                "env"
+            ]
+        },
+        {
+            "name": "clean_package package",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "clean_package",
+                "package"
+            ]
+        },
+        {
+            "name": "clean_test_env test_env",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "clean_test_env",
+                "test_env"
+            ]
+        },
+        {
+            "name": "clean_test test",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "clean_test",
+                "test"
+            ]
+        },
+        {
+            "name": "clean",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "clean"
+            ]
+        },
+        {
+            "name": "vscode",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/project.py",
+            "args": [
+                "vscode"
+            ]
+        },
+        {
+            "name": "debugpy-pytest",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "python": "${workspaceFolder}/@_PYTHON@",
+            "module": "pytest",
+            "args": [
+                "${input:pytest-entry}"
+            ]
+        }
+    ]
+}
