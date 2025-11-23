@@ -22,76 +22,6 @@ class Project:
     __commands: None | list[str] = None
     __project_dir: str = Path(__file__).parent.absolute().as_posix()
 
-    @classmethod
-    def _main(
-        cls,
-        sys_argv: None | list[str] | object = sys.argv[1:]
-    ) -> int:
-        try:
-            avilable_commands: list[str] = [name for name, _ in inspect.getmembers(cls, predicate=inspect.isfunction) if not name.startswith('_')]
-            parser: ArgumentParser = ArgumentParser()
-            parser.add_argument(
-                '-ll', '--log-level',
-                nargs='?',
-                type=str,
-                choices=[
-                    logging.getLevelName(logging.DEBUG),
-                    logging.getLevelName(logging.INFO),
-                    logging.getLevelName(logging.WARNING),
-                    logging.getLevelName(logging.ERROR),
-                    logging.getLevelName(logging.FATAL)
-                ],
-                default=logging.getLevelName(logging.DEBUG),
-                help=f"log level (default: %(default)s)"
-            )
-            parser.add_argument(
-                '-st', '--subprocess-timeout',
-                nargs='?',
-                type=int,
-                default=0,
-                help=f"subprocess timeout in seconds (default: %(default)s)"
-            )
-            parser.add_argument(
-                'commands',
-                nargs='*',
-                type=str,
-                choices=avilable_commands,
-                default=['help'],
-                help='commands (default: %(default)s)'
-            )
-            namespace: Namespace = parser.parse_args(sys_argv)
-            logging_config_dict({
-                'version': 1,
-                'formatters': {
-                    'formatter': {
-                        'format': '%(message)s' # '%(asctime)s %(levelname)-4.4s [%(threadName)s] %(name)s %(funcName)s(%(filename)s:%(lineno)d): %(message)s'
-                    }
-                },
-                'handlers': {
-                    'handler': {
-                        'class': 'logging.StreamHandler',
-                        'formatter': 'formatter',
-                        'stream': 'ext://sys.stdout'
-                    }
-                },
-                'loggers': {
-                    'root': {
-                        'level': logging.getLevelName(namespace.log_level),
-                        'handlers': ['handler']
-                    }
-                }
-            })
-            logger: LoggerAdapter = logging_get_logger()
-            project: Project = Project(
-                help_message=parser.format_help(),
-                namespace=namespace,
-                logger=logger
-            )
-            return project._run()
-        except Exception as e:
-            if cls.__logger: cls.__logger.error(e, exc_info=True)
-            raise e
-
     def __init__(
         self,
         help_message: None | str | object,
@@ -527,4 +457,71 @@ class Project:
             raise e
 
 if __name__ == '__main__':
-    raise SystemExit(Project._main())
+    logger: None | LoggerAdapter = None
+    try:
+        sys_argv: None | list[str] | object = sys.argv[1:]
+        avilable_commands: list[str] = [name for name, _ in inspect.getmembers(Project, predicate=inspect.isfunction) if not name.startswith('_')]
+        parser: ArgumentParser = ArgumentParser()
+        parser.add_argument(
+            '-ll', '--log-level',
+            nargs='?',
+            type=str,
+            choices=[
+                logging.getLevelName(logging.DEBUG),
+                logging.getLevelName(logging.INFO),
+                logging.getLevelName(logging.WARNING),
+                logging.getLevelName(logging.ERROR),
+                logging.getLevelName(logging.FATAL)
+            ],
+            default=logging.getLevelName(logging.DEBUG),
+            help=f"log level (default: %(default)s)"
+        )
+        parser.add_argument(
+            '-st', '--subprocess-timeout',
+            nargs='?',
+            type=int,
+            default=0,
+            help=f"subprocess timeout in seconds (default: %(default)s)"
+        )
+        parser.add_argument(
+            'commands',
+            nargs='*',
+            type=str,
+            choices=avilable_commands,
+            default=['help'],
+            help='commands (default: %(default)s)'
+        )
+        namespace: Namespace = parser.parse_args(sys_argv)
+        logging_config_dict({
+            'version': 1,
+            'formatters': {
+                'formatter': {
+                    'format': '%(message)s' # '%(asctime)s %(levelname)-4.4s [%(threadName)s] %(name)s %(funcName)s(%(filename)s:%(lineno)d): %(message)s'
+                }
+            },
+            'handlers': {
+                'handler': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'formatter',
+                    'stream': 'ext://sys.stdout'
+                }
+            },
+            'loggers': {
+                'root': {
+                    'level': logging.getLevelName(namespace.log_level),
+                    'handlers': ['handler']
+                }
+            }
+        })
+        logger = logging_get_logger()
+        project: Project = Project(
+            help_message=parser.format_help(),
+            namespace=namespace,
+            logger=logger
+        )
+        raise SystemExit(project._run())
+    except Exception as e:
+        if logger: logger.error(e, exc_info=True)
+        raise e
+    except SystemExit as e:
+        raise e
