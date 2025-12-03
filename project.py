@@ -29,14 +29,16 @@ class Project:
         logger: None | LoggerAdapter | object = None
     ) -> None:
         try:
-            if logger and isinstance(logger, LoggerAdapter):
+            if logger is not None and isinstance(logger, LoggerAdapter):
                 self.__logger = logger
             else:
                 self.__logger = logging_get_logger('.'.join([self.__module__, self.__class__.__name__]))
 
             self.__help_message = help_message
-            self.__subprocess_timeout = namespace.subprocess_timeout if namespace.subprocess_timeout > 0 else None
-            self.__commands = namespace.commands
+
+            if namespace is not None:
+                self.__subprocess_timeout = namespace.subprocess_timeout if namespace.subprocess_timeout > 0 else None
+                self.__commands = [namespace.commands] if isinstance(namespace.commands, str) else namespace.commands
         except Exception as e:
             if self.__logger: self.__logger.error(e, exc_info=True)
             raise e
@@ -488,7 +490,7 @@ if __name__ == '__main__':
             nargs='*',
             type=str,
             choices=avilable_commands,
-            default=['help'],
+            default='help',
             help='commands (default: %(default)s)'
         )
         namespace: Namespace = parser.parse_args(sys_argv)
