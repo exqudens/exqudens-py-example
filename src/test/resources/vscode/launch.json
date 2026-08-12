@@ -14,84 +14,119 @@
     "configurations": [
         {
             "name": "help",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "help"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "clean_env env",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "clean_env",
                 "env"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "clean_package package",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "clean_package",
                 "package"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "clean_test_env test_env",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "clean_test_env",
                 "test_env"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "clean_test test",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "clean_test",
                 "test"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "clean",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "clean"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "vscode",
-            "type": "debugpy",
+            "type": "node",
             "request": "launch",
             "console": "internalConsole",
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/project.py",
-            "args": [
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
                 "vscode"
-            ]
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
         },
         {
             "name": "debugpy-pytest",

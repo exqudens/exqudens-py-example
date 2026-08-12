@@ -1,4 +1,5 @@
 import sys
+import os
 import inspect
 import subprocess
 from subprocess import CompletedProcess
@@ -377,12 +378,22 @@ class Project:
 
             project_dir: str = Path(self.__project_dir).as_posix()
             build_dir: str = Path(project_dir).joinpath('build').as_posix()
+            env_file: str = Path(build_dir).joinpath('.env').as_posix()
             test_dir: str = Path(build_dir).joinpath('test').as_posix()
             env_dir: str = Path(test_dir).joinpath('env').as_posix()
             launch_template_file: str = Path(project_dir).joinpath('src', 'test', 'resources', 'vscode', 'launch.json').as_posix()
             launch_target_file: str = Path(project_dir).joinpath('.vscode', 'launch.json').as_posix()
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ...")
+
+            env_txt: str = "PYTHONPATH=" + os.pathsep.join([
+                "build/test/env/lib/site-packages",
+                "src/main/py",
+                "src/test/py"
+            ])
+
+            Path(env_file).parent.mkdir(parents=True, exist_ok=True)
+            Path(env_file).write_bytes(env_txt.encode())
 
             launch_json: str = Path(launch_template_file).read_bytes().decode()
             python_file: str = self._find_python(dir=env_dir)

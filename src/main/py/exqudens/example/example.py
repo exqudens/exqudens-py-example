@@ -1,22 +1,21 @@
 from logging import LoggerAdapter
 from logging import getLogger as logging_get_logger
 
+from xmltodict import parse as xmltodict_parse
+
 class Example:
     """
     Example class.
     """
-    __logger: LoggerAdapter = logging_get_logger('.'.join([__name__, __qualname__]))
+    __logger: LoggerAdapter = LoggerAdapter(logger=logging_get_logger('.'.join([__name__, __qualname__])))
 
-    def __init__(self) -> None:
+    @classmethod
+    def xml_to_dict(cls, input: str) -> dict[str, object]:
         try:
-            pass
-        except Exception as e:
-            self.__logger.info(e, exc_info=True)
-            raise e
+            if not isinstance(input, str):
+                raise Exception("'input' is not an instance of 'str'")
 
-    def xml_to_dict(self) -> dict[str, object]:
-        try:
-            pass
+            return xmltodict_parse(input)
         except Exception as e:
-            self.__logger.info(e, exc_info=True)
+            cls.__logger.error(e, exc_info=True)
             raise e
