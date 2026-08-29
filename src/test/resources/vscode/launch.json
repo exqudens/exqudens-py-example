@@ -140,7 +140,7 @@
                 "${input:pytest-entry}"
             ],
             "windows": {
-                "python": "${workspaceFolder}/build/test/env/Scrypts/python.exe"
+                "python": "${workspaceFolder}/build/test/env/Scripts/python.exe"
             }
         }
     ]
