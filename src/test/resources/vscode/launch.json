@@ -134,11 +134,14 @@
             "request": "launch",
             "console": "internalConsole",
             "cwd": "${workspaceFolder}",
-            "python": "${workspaceFolder}/@_PYTHON@",
+            "python": "${workspaceFolder}/build/test/env/bin/python",
             "module": "pytest",
             "args": [
                 "${input:pytest-entry}"
-            ]
+            ],
+            "windows": {
+                "python": "${workspaceFolder}/build/test/env/Scrypts/python.exe"
+            }
         }
     ]
 }

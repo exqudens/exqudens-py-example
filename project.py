@@ -21,25 +21,31 @@ class Project:
     __help_message: None | str = None
     __subprocess_timeout: None | int = None
     __commands: None | list[str] = None
+    __args: None | list[str] | object = None
     __project_dir: str = Path(__file__).parent.absolute().as_posix()
 
     def __init__(
         self,
         help_message: None | str | object,
         namespace: None | Namespace | object,
+        args: None | list[str] | object,
         logger: None | LoggerAdapter | object = None
     ) -> None:
         try:
-            if logger is not None and isinstance(logger, LoggerAdapter):
+            if isinstance(logger, LoggerAdapter):
                 self.__logger = logger
             else:
-                self.__logger = logging_get_logger('.'.join([self.__module__, self.__class__.__name__]))
+                self.__logger = LoggerAdapter(logger=logging_get_logger(f"{self.__module__}.{self.__class__.__name__}"))
 
-            self.__help_message = help_message
+            if isinstance(help_message, str):
+                self.__help_message = help_message
 
-            if namespace is not None:
+            if isinstance(namespace, Namespace):
                 self.__subprocess_timeout = namespace.subprocess_timeout if namespace.subprocess_timeout > 0 else None
                 self.__commands = [namespace.commands] if isinstance(namespace.commands, str) else namespace.commands
+
+            if isinstance(args, list):
+                self.__args = args
         except Exception as e:
             if self.__logger: self.__logger.error(e, exc_info=True)
             raise e
@@ -146,6 +152,7 @@ class Project:
                 python_file,
                 '-m', 'pip', 'wheel',
                 '--no-deps',
+                '--no-cache-dir',
                 '-w', dist_dir,
                 '--trusted-host', 'pypi.org',
                 '--trusted-host', 'pypi.python.org',
@@ -323,6 +330,8 @@ class Project:
                 python_file,
                 '-m', 'pytest'
             ]
+            if self.__args:
+                cmd.extend(self.__args)
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] execute: {cmd}")
             subprocess.run(
                 cmd,
@@ -395,9 +404,7 @@ class Project:
             Path(env_file).parent.mkdir(parents=True, exist_ok=True)
             Path(env_file).write_bytes(env_txt.encode())
 
-            launch_json: str = Path(launch_template_file).read_bytes().decode()
             python_file: str = self._find_python(dir=env_dir)
-            launch_json = launch_json.replace('@_PYTHON@', Path(python_file).relative_to(project_dir).as_posix())
 
             # list tests
             cmd = [
@@ -423,6 +430,7 @@ class Project:
                 test_entries.append(line)
             if not test_entries:
                 raise Exception(f"no tests found")
+            launch_json: str = Path(launch_template_file).read_bytes().decode()
             launch_json = launch_json.replace('@_OPTIONS@', '",\n                "'.join(test_entries))
             launch_json = launch_json.replace('@_DEFAULT@', test_entries[0])
 
@@ -504,7 +512,9 @@ if __name__ == '__main__':
             default='help',
             help='commands (default: %(default)s)'
         )
-        namespace: Namespace = parser.parse_args(sys_argv)
+        namespace: Namespace = None
+        args: list[str] = None
+        namespace, args = parser.parse_known_args(sys_argv)
         logging_config_dict({
             'version': 1,
             'formatters': {
@@ -530,6 +540,7 @@ if __name__ == '__main__':
         project: Project = Project(
             help_message=parser.format_help(),
             namespace=namespace,
+            args=args,
             logger=logger
         )
         raise SystemExit(project._run())
