@@ -129,15 +129,16 @@
             }
         },
         {
-            "name": "debugpy-pytest",
+            "name": "debugpy-test-application",
             "type": "debugpy",
             "request": "launch",
             "console": "internalConsole",
             "cwd": "${workspaceFolder}",
             "python": "${workspaceFolder}/build/test/env/bin/python",
-            "module": "pytest",
+            "program": "src/test/py/_test_application.py",
             "args": [
-                "${input:pytest-entry}"
+                "--logging-json=src/test/resources/logging.json",
+                "-k=${input:pytest-entry}"
             ],
             "windows": {
                 "python": "${workspaceFolder}/build/test/env/Scripts/python.exe"

@@ -1,1 +1,1 @@
-from exqudens.example.example import Example
+from .example import Example

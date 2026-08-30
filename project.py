@@ -4,6 +4,7 @@ import inspect
 import subprocess
 from subprocess import CompletedProcess
 import shutil
+import json
 import logging
 from logging import LoggerAdapter
 from logging import getLogger as logging_get_logger
@@ -328,13 +329,18 @@ class Project:
             python_file: str = self._find_python(dir=env_dir)
             cmd = [
                 python_file,
-                '-m', 'pytest'
+                'src/test/py/_test_application.py'
             ]
             if self.__args:
                 cmd.extend(self.__args)
+            else:
+                cmd.append('-k=*')
+            env: dict[str, str] = os.environ
+            env['PYTHONPATH'] = os.pathsep.join(['src/main/py'])
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] execute: {cmd}")
             subprocess.run(
                 cmd,
+                env=env,
                 cwd=project_dir,
                 text=True,
                 check=True,
@@ -409,11 +415,14 @@ class Project:
             # list tests
             cmd = [
                 python_file,
-                '-m', 'pytest', '-q', '--co'
+                'src/test/py/_test_application.py', '--list'
             ]
+            env: dict[str, str] = os.environ
+            env['PYTHONPATH'] = os.pathsep.join(['src/main/py'])
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] execute: {cmd}")
             list_tests_out: CompletedProcess[str] = subprocess.run(
                 cmd,
+                env=env,
                 cwd=project_dir,
                 text=True,
                 check=True,
@@ -421,15 +430,11 @@ class Project:
                 timeout=self.__subprocess_timeout
             )
             test_entries: list[str] = [
-                "src/test/py"
+                "*"
             ]
-            for v in list_tests_out.stdout.splitlines():
-                line: str = str(v).strip()
-                if not line:
-                    break
-                test_entries.append(line)
-            if not test_entries:
-                raise Exception(f"no tests found")
+            list_tests_out_stdout: str = list_tests_out.stdout
+            list_tests_out_stdout_as_list: list[str] = json.loads(list_tests_out_stdout)
+            test_entries.extend(list_tests_out_stdout_as_list)
             launch_json: str = Path(launch_template_file).read_bytes().decode()
             launch_json = launch_json.replace('@_OPTIONS@', '",\n                "'.join(test_entries))
             launch_json = launch_json.replace('@_DEFAULT@', test_entries[0])
@@ -531,7 +536,7 @@ if __name__ == '__main__':
             },
             'loggers': {
                 'root': {
-                    'level': logging.getLevelName(namespace.log_level),
+                    'level': str(namespace.log_level),
                     'handlers': ['handler']
                 }
             }

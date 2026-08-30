@@ -2,11 +2,11 @@ from logging import LoggerAdapter
 from logging import getLogger as logging_get_logger
 from pathlib import Path
 
-class UtilsForTest:
+class _TestUtils:
     """
-    UtilsForTest class.
+    _TestUtils class.
     """
-    __logger: LoggerAdapter = logging_get_logger('.'.join([__name__, __qualname__]))
+    __logger: LoggerAdapter = LoggerAdapter(logger=logging_get_logger('.'.join([__name__, __qualname__])))
 
     @classmethod
     def get_project_dir(cls) -> str:
