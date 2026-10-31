@@ -33,11 +33,11 @@ class _TestApplication:
                         result = cls.list_test_suite(input=v, result=result)
                     elif isinstance(v, TestCase):
                         test_module_name: str = f"{v.__class__.__module__}"
-                        if test_module_name not in result:
-                            result.append(test_module_name)
+                        if f"{test_module_name}.*" not in result:
+                            result.append(f"{test_module_name}.*")
                         test_class_name: str = f"{test_module_name}.{v.__class__.__name__}"
-                        if test_class_name not in result:
-                            result.append(test_class_name)
+                        if f"{test_class_name}.*" not in result:
+                            result.append(f"{test_class_name}.*")
                         result.append(f"{test_class_name}.{v._testMethodName}")
             return result
         except Exception as e:
@@ -50,12 +50,15 @@ class _TestApplication:
             list_only: bool = False
             format_txt: bool = False
             logging_file: str = None
+            pattern_file: str = None
             patterns: list[str] = []
             if isinstance(args, list):
                 list_only = '--list' in args or '-l' in args
                 format_txt = '--format=txt' in args
                 logging_prefix: str = '--logging-json='
                 logging_prefix_len: int = len(logging_prefix)
+                pattern_json_prefix: str = '--pattern-json='
+                pattern_json_prefix_len: int = len(pattern_json_prefix)
                 pattern_prefix_1: str = '-k='
                 pattern_prefix_1_len: int = len(pattern_prefix_1)
                 pattern_prefix_2: str = '--pattern='
@@ -65,6 +68,10 @@ class _TestApplication:
                         v_sub_str: str = v[logging_prefix_len:].strip()
                         if v_sub_str:
                             logging_file = v_sub_str
+                    if v.startswith(pattern_json_prefix):
+                        v_sub_str: str = v[pattern_json_prefix_len:].strip()
+                        if v_sub_str:
+                            pattern_file = v_sub_str
                     if v.startswith(pattern_prefix_1):
                         v_sub_str: str = v[pattern_prefix_1_len:].strip()
                         if v_sub_str:
@@ -82,6 +89,9 @@ class _TestApplication:
                     logging_content: str = Path(logging_file).read_bytes().decode()
                     logging_dict = json.loads(logging_content)
                     logging_config_dict(logging_dict)
+            if pattern_file:
+                pattern_content: str = Path(pattern_file).read_bytes().decode()
+                patterns = json.loads(pattern_content)
             test_suite: TestSuite = cls.get_test_suite(testNamePatterns=patterns)
             if list_only:
                 list_output: list[str] = cls.list_test_suite(input=test_suite)

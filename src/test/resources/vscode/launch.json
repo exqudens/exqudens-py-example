@@ -13,6 +13,22 @@
     ],
     "configurations": [
         {
+            "name": "debugpy-test-application",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "python": "${workspaceFolder}/build/test/env/bin/python",
+            "program": "src/test/py/_test_application.py",
+            "args": [
+                "--logging-json=src/test/resources/logging.json",
+                "-k=${input:pytest-entry}"
+            ],
+            "windows": {
+                "python": "${workspaceFolder}/build/test/env/Scripts/python.exe"
+            }
+        },
+        {
             "name": "help",
             "type": "node",
             "request": "launch",
@@ -97,6 +113,103 @@
             }
         },
         {
+            "name": "clean_vscode vscode",
+            "type": "node",
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
+                "clean_vscode",
+                "vscode"
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
+        },
+        {
+            "name": "clean_env",
+            "type": "node",
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
+                "clean_env"
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
+        },
+        {
+            "name": "clean_package",
+            "type": "node",
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
+                "clean_package"
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
+        },
+        {
+            "name": "clean_test_env",
+            "type": "node",
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
+                "clean_test_env"
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
+        },
+        {
+            "name": "clean_test",
+            "type": "node",
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
+                "clean_test"
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
+        },
+        {
+            "name": "clean_vscode",
+            "type": "node",
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "python",
+            "runtimeArgs": [
+                "project.py",
+                "clean_vscode"
+            ],
+            "windows": {
+                "runtimeExecutable": "py"
+            }
+        },
+        {
             "name": "clean",
             "type": "node",
             "request": "launch",
@@ -110,38 +223,6 @@
             ],
             "windows": {
                 "runtimeExecutable": "py"
-            }
-        },
-        {
-            "name": "vscode",
-            "type": "node",
-            "request": "launch",
-            "console": "internalConsole",
-            "outputCapture": "std",
-            "cwd": "${workspaceFolder}",
-            "runtimeExecutable": "python",
-            "runtimeArgs": [
-                "project.py",
-                "vscode"
-            ],
-            "windows": {
-                "runtimeExecutable": "py"
-            }
-        },
-        {
-            "name": "debugpy-test-application",
-            "type": "debugpy",
-            "request": "launch",
-            "console": "internalConsole",
-            "cwd": "${workspaceFolder}",
-            "python": "${workspaceFolder}/build/test/env/bin/python",
-            "program": "src/test/py/_test_application.py",
-            "args": [
-                "--logging-json=src/test/resources/logging.json",
-                "-k=${input:pytest-entry}"
-            ],
-            "windows": {
-                "python": "${workspaceFolder}/build/test/env/Scripts/python.exe"
             }
         }
     ]

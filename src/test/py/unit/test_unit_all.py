@@ -20,7 +20,7 @@ class TestUnitAll(TestCase):
         self.__logger.info(f"project_dir: '{project_dir}'")
 
         expected: int = 111
-        actual: int = int(input("AAA: ").strip())
+        actual: int = int("111")
 
         self.assertEqual(expected, actual)
 

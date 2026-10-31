@@ -372,20 +372,6 @@ class Project:
             self.__logger.error(e, exc_info=True)
             raise e
 
-    def clean(self) -> None:
-        try:
-            self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ...")
-
-            self.clean_test()
-            self.clean_test_env()
-            self.clean_package()
-            self.clean_env()
-
-            self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
-        except Exception as e:
-            self.__logger.error(e, exc_info=True)
-            raise e
-
     def vscode(self) -> None:
         try:
             self.env()
@@ -441,6 +427,38 @@ class Project:
 
             Path(launch_target_file).parent.mkdir(parents=True, exist_ok=True)
             Path(launch_target_file).write_bytes(launch_json.encode())
+
+            self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
+        except Exception as e:
+            self.__logger.error(e, exc_info=True)
+            raise e
+
+    def clean_vscode(self) -> None:
+        try:
+            project_dir: str = Path(self.__project_dir).as_posix()
+            vscode_dir: str = Path(project_dir).joinpath('.vscode').as_posix()
+
+            if not Path(vscode_dir).exists():
+                return None
+
+            self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ...")
+
+            shutil.rmtree(vscode_dir)
+
+            self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
+        except Exception as e:
+            self.__logger.error(e, exc_info=True)
+            raise e
+
+    def clean(self) -> None:
+        try:
+            self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ...")
+
+            self.clean_vscode()
+            self.clean_test()
+            self.clean_test_env()
+            self.clean_package()
+            self.clean_env()
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
