@@ -48,14 +48,14 @@ class Project:
             if isinstance(args, list):
                 self.__args = args
         except Exception as e:
-            if self.__logger: self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def help(self) -> None:
         try:
             self.__logger.info(self.__help_message)
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def env(self) -> None:
@@ -114,7 +114,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def clean_env(self) -> None:
@@ -132,7 +132,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def package(self) -> None:
@@ -172,7 +172,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def clean_package(self) -> None:
@@ -190,7 +190,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def test_env(self) -> None:
@@ -251,7 +251,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def update_test_env(self) -> None:
@@ -291,7 +291,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def clean_test_env(self) -> None:
@@ -310,7 +310,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def test(self) -> None:
@@ -350,7 +350,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def clean_test(self) -> None:
@@ -369,7 +369,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def vscode(self) -> None:
@@ -430,7 +430,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def clean_vscode(self) -> None:
@@ -447,7 +447,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def clean(self) -> None:
@@ -462,7 +462,7 @@ class Project:
 
             self.__logger.info(f"-- [{inspect.currentframe().f_code.co_name}] ... done")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def _run(self) -> int:
@@ -474,7 +474,7 @@ class Project:
                 method()
             return 0
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
     def _find_python(self, dir: None | str | object) -> str:
@@ -497,7 +497,7 @@ class Project:
             else:
                 raise Exception(f"unexpected condition")
         except Exception as e:
-            self.__logger.error(e, exc_info=True)
+            if isinstance(self.__logger, LoggerAdapter): self.__logger.error(e, exc_info=True)
             raise e
 
 if __name__ == '__main__':

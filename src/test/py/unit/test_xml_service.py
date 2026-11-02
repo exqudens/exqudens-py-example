@@ -5,11 +5,11 @@ from unittest import TestCase
 
 from _test_utils import _TestUtils
 
-from exqudens.example import Example
+from exqudens.example import Example, XmlService
 
-class TestUnitAll(TestCase):
+class TestXmlService(TestCase):
     """
-    TestUnitAll class.
+    TestXmlService class.
     """
     __logger: LoggerAdapter = LoggerAdapter(logger=logging_get_logger('.'.join([__name__, __qualname__])))
 
@@ -30,8 +30,11 @@ class TestUnitAll(TestCase):
         try:
             self.__logger.info("bgn")
 
-            project_dir: str = _TestUtils.get_project_dir()
-            self.__logger.info(f"project_dir: '{project_dir}'")
+            example: Example = Example()
+            self.__logger.info(f"example: {isinstance(example, Example)}")
+
+            xml_service: XmlService = example.get_xml_service()
+            self.__logger.info(f"xml_service: {isinstance(xml_service, XmlService)}")
 
             expected: dict[str, object] = {
                 'root': {
@@ -40,7 +43,7 @@ class TestUnitAll(TestCase):
             }
             self.__logger.info(f"expected: {expected}")
 
-            actual: dict[str, object] = Example.xml_to_dict("<root><item>Hello</item></root>")
+            actual: dict[str, object] = xml_service.xml_to_dict("<root><item>Hello</item></root>")
             self.__logger.info(f"actual: {actual}")
 
             self.assertEqual(expected, actual)
