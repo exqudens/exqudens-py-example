@@ -24,46 +24,48 @@ class CalculatorService:
 
     def generate_amortization(
         self,
-        principal,
-        annual_rate,
-        months,
-        extra_monthly_principal=0
+        principal: int,
+        annual_rate: float,
+        months: int,
+        extra_principal_schedule: dict[int, int] = dict()
     ) -> list[dict[str, str]]:
         try:
             # Convert all inputs to Decimal objects
-            principal = Decimal(str(principal))
-            annual_rate = Decimal(str(annual_rate))
-            extra_monthly_principal = Decimal(str(extra_monthly_principal))
+            decimal_principal = Decimal(str(principal))
+            decimal_annual_rate = Decimal(str(annual_rate))
 
             # Calculate monthly interest rate (r)
-            monthly_rate = (annual_rate / Decimal("100")) / Decimal("12")
+            monthly_rate = (decimal_annual_rate / Decimal("100")) / Decimal("12")
 
             # Quantization template for standard currency formatting ($0.01)
             cents = Decimal("0.01")
 
             # Calculate standard monthly base payment (EMI) using total months (n) directly
             if monthly_rate == 0:
-                base_payment = principal / Decimal(str(months))
+                base_payment = decimal_principal / Decimal(str(months))
             else:
                 # Formula: P * (R * (1 + R)^N) / ((1 + R)^N - 1)
                 rate_factor = (Decimal("1") + monthly_rate) ** months
                 base_payment = (
-                    principal
+                    decimal_principal
                     * (monthly_rate * rate_factor)
                     / (rate_factor - Decimal("1"))
                 )
 
-            schedule = []
-            balance = principal
-            current_month = 0
+            schedule: list[dict[str, str]] = []
+            balance = decimal_principal
+            current_month: int = 0
 
             while balance > Decimal("0.01") and current_month < months:
                 current_month += 1
+                extra_monthly_principal: int = extra_principal_schedule.get(current_month, 0)
+
+                decimal_extra_monthly_principal = Decimal(str(extra_monthly_principal))
 
                 # Calculate interest based on the current period balance
                 interest_paid = balance * monthly_rate
                 scheduled_principal = base_payment - interest_paid
-                total_principal_payment = scheduled_principal + extra_monthly_principal
+                total_principal_payment = scheduled_principal + decimal_extra_monthly_principal
 
                 # Handle final payment constraints to prevent negative balances
                 if balance <= total_principal_payment:
@@ -72,7 +74,7 @@ class CalculatorService:
                     balance = Decimal("0")
                 else:
                     balance -= total_principal_payment
-                    actual_extra_paid = extra_monthly_principal
+                    actual_extra_paid = decimal_extra_monthly_principal
 
                 # Append row elements with mathematically exact monetary rounding
                 schedule.append(

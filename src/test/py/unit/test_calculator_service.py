@@ -26,15 +26,25 @@ class TestCalculatorService(TestCase):
 
         self.assertTrue(isinstance(calculator_service, CalculatorService))
 
+        expected_months: int = 12
         schedule: list[dict[str, str]] = calculator_service.generate_amortization(
             principal=1000,
             annual_rate=10.0,
-            months=12
+            months=expected_months,
+            extra_principal_schedule={
+                3: 10,
+                6: 20,
+                9: 30
+            }
         )
         self.__logger.info(f"schedule.size: {len(schedule)}")
+        schedule_as_string: str = ''
         for i, v in enumerate(schedule):
-            self.__logger.info(f"schedule[{i}]: {v}")
+            schedule_as_string += '\n'
+            schedule_as_string += f"[{i}]: {v}"
 
-        self.assertTrue(len(schedule) == 12)
+        self.__logger.info(f"schedule: {schedule_as_string}")
+
+        self.assertTrue(len(schedule) == expected_months)
 
         self.__logger.info("end")
